@@ -6,10 +6,9 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    height: 100vh;
     background-color: #e1decf;
     font-family: "Hanken Grotesk", serif;
-    padding: 1rem;
     overflow-x: hidden;
 }
 
@@ -25,7 +24,7 @@ body {
     text-align: center;
     width: 100%;
     max-width: 800px;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 .countdown-title-body {
@@ -36,7 +35,7 @@ body {
 }
 
 .countdown-title {
-    font-size: clamp(25px, 2vw, 30px);
+    font-size: clamp(35px, 2vw, 40px);
     font-weight: bold;
     color: black;
     margin-bottom: 0;
@@ -80,18 +79,18 @@ body {
     padding-top: clamp(3px, 1vw, 5px);
     padding-bottom: clamp(3px, 1vw, 5px);
     border-radius: 8px;
-    font-size: clamp(20px, 2vw, 30px);
+    font-size: clamp(35px, 2vw, 40px);
     font-weight: bolder;
     text-align: center;
 }
 
 .timer-separator {
-    font-size: clamp(25px, 2vw, 30px);
+    font-size: clamp(35px, 2vw, 40px);
     font-weight: bold;
 }
 
 .timer-label {
     margin-top: 0.5rem;
-    font-size: clamp(0.6rem, 1.2vw, 1rem);
+    font-size: clamp(12px, 2vw, 18px);
     color: #b9313a;
 }
