@@ -25,6 +25,8 @@ body {
     text-align: center;
     width: 100%;
     max-width: 800px;
+    height: auto;
+    padding: 1.5rem;
 }
 
 .countdown-title-body {
