@@ -7,7 +7,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #e1decf;
+    background-color: #cecbbe;
     font-family: "Hanken Grotesk", serif;
     overflow-x: hidden;
 }
@@ -34,6 +34,8 @@ body {
     justify-content: center;
     text-wrap: nowrap;
     line-height: 0;
+    height: clamp(50px, 5vh, 70px);
+    overflow: hidden;
 }
 
 .countdown-title {
@@ -41,6 +43,17 @@ body {
     font-weight: bold;
     color: black;
     margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    border-right: 2px solid black;
+    animation: blinkCursor 0.8s infinite;
+}
+
+@keyframes blinkCursor {
+    50% {
+        border-color: transparent;
+    }
 }
 
 .countdown-gif {

@@ -1,36 +1,30 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Set the target date for the birthday
     const birthdayDate = new Date("2025-02-11T00:00:00");
 
-    // Function to update each digit separately
     function updateTimerElement(id, value) {
         document.getElementById(id).textContent = value;
     }
 
-    // Countdown function
     function updateCountdown() {
         const now = new Date();
         const timeDiff = birthdayDate - now;
 
         if (timeDiff <= 0) {
-            clearInterval(countdownInterval); // Stop the countdown
+            clearInterval(countdownInterval);
             document.getElementById('countdown').innerHTML = 'It\'s your birthday! 🎉';
             return;
         }
 
-        // Calculate time units
         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-        // Convert numbers to two-digit format
         const daysStr = String(days).padStart(2, '0');
         const hoursStr = String(hours).padStart(2, '0');
         const minutesStr = String(minutes).padStart(2, '0');
         const secondsStr = String(seconds).padStart(2, '0');
 
-        // Update the HTML elements
         updateTimerElement("days1", daysStr[0]);
         updateTimerElement("days2", daysStr[1]);
         updateTimerElement("hours1", hoursStr[0]);
@@ -41,9 +35,43 @@ document.addEventListener('DOMContentLoaded', function () {
         updateTimerElement("seconds2", secondsStr[1]);
     }
 
-    // Start the countdown timer
     const countdownInterval = setInterval(updateCountdown, 1000);
-
-    // Initial call to display the correct time immediately
     updateCountdown();
+
+    const titleElement = document.querySelector(".countdown-title");
+    const texts = ["save the date", "habadu kayra!"];
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function typeWriterEffect() {
+        const currentText = texts[textIndex];
+
+        if (!isDeleting) {
+            titleElement.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
+
+            if (charIndex === currentText.length) {
+                let delay = textIndex === 1 ? 6000 : 2000;
+                setTimeout(() => {
+                    isDeleting = true;
+                    typeWriterEffect();
+                }, delay);
+                return;
+            }
+        } else {
+            titleElement.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+
+            if (charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % texts.length;
+            }
+        }
+
+        let speed = isDeleting ? 100 : 200;
+        setTimeout(typeWriterEffect, speed);
+    }
+
+    typeWriterEffect();
 });
