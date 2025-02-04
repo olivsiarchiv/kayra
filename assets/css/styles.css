@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #e1decf;
+    font-family: "Hanken Grotesk", serif;
+    padding: 1rem;
+    overflow-x: hidden;
+}
+
+.countdown-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 2rem);
+    max-width: 1500px;
+}
+
+.countdown-body {
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.countdown-title-body {
+    display: flex;
+    justify-content: center;
+    text-wrap: nowrap;
+    line-height: 0;
+}
+
+.countdown-title {
+    font-size: clamp(25px, 2vw, 30px);
+    font-weight: bold;
+    color: black;
+    margin-bottom: 0;
+}
+
+.countdown-gif {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.countdown-gif img {
+    width: clamp(300px, 40vw, 400px);
+    height: auto;
+    max-width: 100%;
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: clamp(0.1rem, 1vw, 0.5rem);
+}
+
+.timer-segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer-item-container {
+    display: flex;
+    gap: clamp(0.05rem, 1vw, 0.2rem);
+    justify-content: center;
+    align-items: center;
+}
+
+.timer-item {
+    background-color: #f8f4eb;
+    padding-left: clamp(6px, 1vw, 10px);
+    padding-right: clamp(6px, 1vw, 10px);
+    padding-top: clamp(3px, 1vw, 5px);
+    padding-bottom: clamp(3px, 1vw, 5px);
+    border-radius: 8px;
+    font-size: clamp(20px, 2vw, 30px);
+    font-weight: bolder;
+    text-align: center;
+}
+
+.timer-separator {
+    font-size: clamp(25px, 2vw, 30px);
+    font-weight: bold;
+}
+
+.timer-label {
+    margin-top: 0.5rem;
+    font-size: clamp(0.6rem, 1.2vw, 1rem);
+    color: #b9313a;
+}
