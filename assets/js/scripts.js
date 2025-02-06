@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const birthdayDate = new Date("2025-02-11T00:00:00");
+    const card = document.querySelector(".bdayCard");
+    const cardContainer = document.querySelector(".bday-card-container");
+    const audio = document.getElementById("audio");
 
     function updateTimerElement(id, value) {
         document.getElementById(id).textContent = value;
@@ -12,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (timeDiff <= 0) {
             clearInterval(countdownInterval);
             document.getElementById('countdown').innerHTML = 'It\'s your birthday! 🎉';
+            document.querySelector('.openme-btn').style.display = 'block';
             return;
         }
 
@@ -74,4 +78,26 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     typeWriterEffect();
+
+    function toggleCard() {
+        if (card.classList.contains("open")) {
+            card.classList.remove("open");
+            audio.pause();
+            audio.currentTime = 0; // Reset audio
+        } else {
+            card.classList.add("open");
+            audio.play();
+        }
+    }
+
+    // Show the card container and add click event
+    window.openBdayCard = function () {
+        cardContainer.style.display = "flex";
+    };
+
+    card.addEventListener("click", toggleCard);
 });
+
+function openBdayCard() {
+    document.querySelector('.bday-card-container').style.display = 'flex';
+}

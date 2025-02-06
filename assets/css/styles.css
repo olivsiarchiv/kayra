@@ -110,3 +110,117 @@ body {
     color: #b9313a;
 }
 
+.openme-btn {
+    margin-top: 20px;
+    padding: 8px 30px;
+    font-size: 25px;
+    font-weight: bold;
+    background-color: #b9313a;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    border: 3px solid black;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.openme-btn:hover {
+    background-color: #c75159;
+    color: black;
+}
+
+.bday-card-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+
+.bdayCard {
+    border-radius: 30px;
+    position: relative;
+    width: 420px;
+    height: 500px;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    transform: perspective(2000px);
+    transition: 1s;
+}
+
+.cardFront {
+    position: relative;
+    background-color: #fef0f8;
+    width: 420px;
+    height: 500px;
+    border-radius: 0 15px 15px 0;
+    overflow: hidden;
+    transform-origin: left;
+    box-shadow: inset 100px 20px 100px rgba(0, 0, 0, 0.1), 30px 0 50px rgba(0, 0, 0, 0.1);
+    transition: 0.6s;
+}
+
+.khaiImg {
+    display: flex;
+    justify-content: center;
+    top: 30px;
+    left: 25px;
+    position: absolute;
+    width: 100px;
+    height: auto;
+    z-index: 1;
+}
+
+.happy {
+    text-align: center;
+    left: 10%;
+    top: 84%;
+    font-size: 1.5em;
+    font-family: Tahoma, sans-serif;
+    color: hotpink;
+    position: absolute;
+    transition: 0.1s;
+    z-index: 6;
+}
+
+.cardInside {
+    position: absolute;
+    background-color: #f8f4eb;
+    width: 420px;
+    height: 500px;
+    z-index: -1;
+    left: 0;
+    border-radius: 0 15px 15px 0;
+    top: 0;
+    box-shadow: inset 100px 20px 100px rgba(191, 190, 190, 0.2);
+}
+
+p {
+    margin: 15px 20px 10px 30px;
+    text-align: justify;
+    font-size: 10px;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+.back {
+    font-family: Tahoma, sans-serif;
+    color: #333;
+    text-align: center;
+    margin: 30px;
+}
+
+.bdayCard.open {
+    transform: perspective(2500px) rotate(0deg);
+    box-shadow: inset 100px 20px 100px rgba(116, 115, 115, 0.5),
+    0 10px 100px rgba(116, 115, 115, 0.5);
+}
+
+.bdayCard.open .cardFront {
+    transform: rotateY(-160deg);
+    background-color: #f8f4eb;
+}
+
+.bdayCard.open .happy {
+    visibility: hidden;
+}
