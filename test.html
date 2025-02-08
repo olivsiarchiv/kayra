@@ -659,6 +659,16 @@
             cake.addEventListener("pointerdown", function (event) {
                 event.preventDefault();
                 event.stopPropagation();
+
+                let x, y;
+                if (event.touches) {
+                    x = event.touches[0].clientX;
+                    y = event.touches[0].clientY;
+                } else {
+                    x = event.clientX;
+                    y = event.clientY;
+                }
+                
                 const rect = cake.getBoundingClientRect();
                 const left = event.clientX - rect.left;
                 const top = event.clientY - rect.top;
