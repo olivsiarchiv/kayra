@@ -518,6 +518,9 @@
             <h5 style="font-style: italic; font-size: 10px; color: grey;">click the card</h5>
         </div>
     </div>
+    <audio id="audio" preload="auto">
+        <source src="assets/img/.." type="audio/mp3">
+    </audio>
     
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -606,6 +609,23 @@
             }
 
             typeWriterEffect();
+
+            window.openBdayCard = function() {
+                cardContainer.style.display = "flex";
+            };
+
+            function openCard(event) {
+                if (card.classList.contains("open")) {
+                    card.classList.remove("open");
+                    audio.pause();
+                    audio.currentTime = 0;
+                    resetCandles();
+                } else {
+                    card.classList.add("open");
+                    audio.play();
+                }
+            }
+            card.addEventListener("click", openCard);
 
             function updateCandleCount() {
                 const activeCandles = candles.filter(
