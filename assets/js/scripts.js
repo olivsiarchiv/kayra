@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    cake.addEventListener("touchend", handleTouch);
+    cake.addEventListener("touchstart", handleTouch);
 
     function addCandle(clientX, clientY) {
         const rect = cake.getBoundingClientRect();
