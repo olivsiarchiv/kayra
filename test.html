@@ -657,7 +657,7 @@
             }
 
             cake.addEventListener("click", function (event) {
-                event.stopPropagation();
+                // event.stopPropagation();
                 const rect = cake.getBoundingClientRect();
                 const left = event.clientX - rect.left;
                 const top = event.clientY - rect.top;
