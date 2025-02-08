@@ -117,10 +117,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     cake.addEventListener("click", function (event) {
+        event.stopPropagation();
         const rect = cake.getBoundingClientRect();
-        const left = event.clientX - rect.left;
-        const top = event.clientY - rect.top;
-        addCandle(left, top);
+        addCandle(event.clientX - rect.left, event.clientY - rect.top);
     });
 
     function addCandle(left, top) {
