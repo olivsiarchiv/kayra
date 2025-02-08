@@ -615,6 +615,7 @@
             };
 
             function openCard(event) {
+                event.stopPropagation();
                 if (card.classList.contains("open")) {
                     card.classList.remove("open");
                     audio.pause();
