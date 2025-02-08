@@ -386,10 +386,8 @@
             }
 
             .flame {
-                display: block;
-                opacity: 1;
-                visibility: visible;
-                position: absolute;
+                position: relative !important;
+                z-index: 9999 !important;
                 background-color: orange;
                 width: 12px;
                 height: 30px;
@@ -671,7 +669,7 @@
                     x = event.clientX;
                     y = event.clientY;
                 }
-
+                
                 const rect = cake.getBoundingClientRect();
                 const left = event.clientX - rect.left;
                 const top = event.clientY - rect.top;
