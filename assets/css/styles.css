@@ -33,7 +33,6 @@ body {
     display: flex;
     justify-content: center;
     text-wrap: nowrap;
-    line-height: 0;
     height: clamp(75px, 5vh, 80px);
     overflow: hidden;
 }
@@ -209,7 +208,7 @@ body {
     margin-bottom: 20px;
     font-size: 30px;
     font-weight: bold;
-    color: #f0e4d0;
+    color: white;
     background-color: #ff8fab;
     padding: 10px;
     border-radius: 10px;
@@ -218,11 +217,6 @@ body {
     margin-left: auto;
     margin-right: auto;
     border: 2px solid #ffc2d1;
-}
-
-.candle-count-display span {
-    font-weight: bold;
-    color: #AD030F;
 }
 
 .cake {
@@ -236,14 +230,14 @@ body {
 }
 
 .plate {
-    width: 270px;
+    width: 300px;
     height: 110px;
     position: absolute;
     bottom: -10px;
-    left: -10px;
-    background-color: #ccc;
+    left: -25px;
+    background-color: #e2dcfd;
     border-radius: 50%;
-    box-shadow: 0 2px 0 #b3b3b3, 0 4px 0 #b3b3b3, 0 5px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 0 #FBFBFB, 0 4px 0 #FBFBFB, 0 5px 40px rgba(0, 0, 0, 0.5);
 }
 
 .cake > * {
@@ -256,8 +250,22 @@ body {
     width: 250px;
     height: 100px;
     border-radius: 50%;
-    background-color: #ffc2d1;
-    box-shadow: 0 2px 0px #fb6f92, 0 4px 0px #ff8fab, 0 6px 0px #ff8fab, 0 8px 0px #ff8fab, 0 10px 0px #ff8fab, 0 12px 0px #ff8fab, 0 14px 0px #ff8fab, 0 16px 0px #ff8fab, 0 18px 0px #ff8fab, 0 20px 0px #ff8fab, 0 22px 0px #ff8fab, 0 24px 0px #ff8fab, 0 26px 0px #ff8fab, 0 28px 0px #ff8fab, 0 30px 0px #ff8fab;
+    background-color: #b9313a;
+    box-shadow: 
+        0 2px 0px #9b1d20,
+        0 4px 0px #9b1d20,
+        0 6px 0px #ffff,
+        0 8px 0px #ffff,
+        0 10px 0px #ffff,
+        0 12px 0px #ffff,
+        0 14px 0px #9b1d20,
+        0 16px 0px #9b1d20,
+        0 18px 0px #9b1d20,
+        0 20px 0px #b9313a,
+        0 22px 0px #b9313a,
+        0 24px 0px #b9313a,
+        inset 0 10px 15px rgba(255, 255, 255, 0.2),
+        inset 0 -10px 15px rgba(0, 0, 0, 0.2);
 }
 
 .layer-top {
@@ -273,13 +281,20 @@ body {
 }
 
 .icing {
-    top: 2px;
-    left: 5px;
-    background-color: #f0e4d0;
-    width: 240px;
+    top: 0;
+    left: 0;
+    background-color: #ffff;
+    width: 250px;
     height: 90px;
     border-radius: 50%;
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,1) 0%,
+        rgba(255,255,255,0.95) 50%,
+        rgba(255,255,255,0.9) 100%
+    );
 }
+
 .icing:before {
     content: "";
     position: absolute;
@@ -287,8 +302,8 @@ body {
     right: 5px;
     bottom: 6px;
     left: 5px;
-    background-color: #f4ebdc;
-    box-shadow: 0 0 4px #f6efe3, 0 0 4px #f6efe3, 0 0 4px #f6efe3;
+    background-color: #ffff;
+    box-shadow: 0 0 4px #ffff, 0 0 4px #ffff, 0 0 4px #ffff;
     border-radius: 50%;
     z-index: 1;
 }
@@ -299,33 +314,54 @@ body {
     height: 60px;
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
-    background-color: #f0e4d0; 
+    background-color: #ffff;
 }
 
 .drip1 {
-    top: 53px;
-    left: 5px;
+    top: 50px;
+    left: 25px;
     transform: skewY(15deg);
-    height: 48px;
-    width: 40px;
+    width: 80px;
+    height: 60px;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 
+        inset -2px 0 3px rgba(0,0,0,0.1),
+        inset 2px 0 3px rgba(0,0,0,0.1);
 }
 
 .drip2 {
-    top: 69px;
+    top: 46px;
     left: 181px;
-    transform: skewY(-15deg);
+    width: 69.5px;
+    height: 80px;
+    transform: skewY(-12deg);
+    transform: rotateY(12deg);
+    border-bottom-left-radius: 80px;
+    border-bottom-right-radius: 15px;
+    box-shadow: 
+        inset -2px 0 5px rgba(0,0,0,0),
+        inset 2px 0 5px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .drip3 {
-    top: 54px;
-    left: 90px;
-    width: 80px;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
+    top: 50px;
+    left: 105px;
+    width: 100px;
+    height: 83px;
+    border-bottom-left-radius: 80px;
+    border-bottom-right-radius: 50px;
+    transform: skewY(-20deg);
+    rotate: 30deg;
+    /* box-shadow: 
+        inset 0 0 0 rgba(0,0,0,0),
+        inset 2px 0 5px rgba(0,0,0,0.1),
+        0 6px 8px rgba(0,0,0,0.05); */
 }
 
+
 .candle {
-    background-color: #7B020B;
+    background-color: #9b1d20;
     width: 12px;
     height: 35px;
     border-radius: 6px/3px;
@@ -343,7 +379,7 @@ body {
     width: 12px;
     height: 6px;
     border-radius: 50%;
-    background-color: #ad030f;
+    background-color: #b9313a;
 }
 
 .candle.out .flame {

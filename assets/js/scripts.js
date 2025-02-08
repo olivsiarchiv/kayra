@@ -90,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
     typeWriterEffect();
 
     // birthday card
-
     function resetCandles() {
         candles.forEach(candle => candle.remove());
         candles = [];
@@ -146,8 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
         analyser.getByteFrequencyData(dataArray);
-        const average = dataArray.reduce((sum, val) => sum + val, 0) / bufferLength;
-        return average > 50;
+        return dataArray.reduce((sum, val) => sum + val, 0) / bufferLength > 50;
     }
 
     function blowOutCandles() {
@@ -184,14 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 microphone = audioContext.createMediaStreamSource(stream);
                 microphone.connect(analyser);
                 analyser.fftSize = 256;
-    
-                // Check blowing every 300ms
-                setInterval(() => {
-                    if (isBlowing()) {
-                        console.log("Detected blowing sound! 🌬️");
-                        blowOutCandles();
-                    }
-                }, 300);
+                setInterval(blowOutCandles, 300);
             }).catch(error => {
                 alert("Microphone access is required for blowing out candles.");
                 console.error("Microphone access denied: ", error);
@@ -221,10 +212,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     card.addEventListener("click", toggleCard);
-
-    document.addEventListener("click", function (event) {
-        if (!card.contains(event.target) && !cake.contains(event.target)) {
-            return;
-        }
-    });
 });
