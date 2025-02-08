@@ -119,19 +119,21 @@ document.addEventListener('DOMContentLoaded', function () {
     cake.addEventListener("click", function (event) {
         event.stopPropagation();
         const rect = cake.getBoundingClientRect();
-        addCandle(event.clientX - rect.left, event.clientY - rect.top);
+        const left = event.clientX - rect.left;
+        const top = event.clientY - rect.top;
+        addCandle(left, top);
     });
 
     function addCandle(left, top) {
         const candle = document.createElement("div");
         candle.className = "candle";
-        candle.style.left = left + "px";
-        candle.style.top = top + "px";
-    
+        candle.style.left = `${left}px`;
+        candle.style.top = `${top}px`;
+        
         const flame = document.createElement("div");
         flame.className = "flame";
         candle.appendChild(flame);
-    
+        
         cake.appendChild(candle);
         candles.push(candle);
         updateCandleCount();
