@@ -626,7 +626,7 @@
                     audio.play();
                 }
             }
-            card.addEventListener("click", openCard);
+            card.addEventListener("pointerdown", openCard);
 
             function resetCandles() {
                 candles.forEach(candle => candle.remove());
@@ -657,6 +657,7 @@
             }
 
             cake.addEventListener("pointerdown", function (event) {
+                event.preventDefault();
                 event.stopPropagation();
                 const rect = cake.getBoundingClientRect();
                 const left = event.clientX - rect.left;
