@@ -9,9 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let audioContext;
     let analyser;
     let microphone;
+    let confettiActive = false;
     let micPermissionGranted = false;
 
-    // Countdown Timer
+    // countdown timer
     function updateTimerElement(id, value) {
         document.getElementById(id).textContent = value;
     }
@@ -27,10 +28,15 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const daysStr = String(Math.floor(timeDiff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-        const hoursStr = String(Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-        const minutesStr = String(Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-        const secondsStr = String(Math.floor((timeDiff % (1000 * 60)) / 1000)).padStart(2, '0');
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+        const daysStr = String(days).padStart(2, '0');
+        const hoursStr = String(hours).padStart(2, '0');
+        const minutesStr = String(minutes).padStart(2, '0');
+        const secondsStr = String(seconds).padStart(2, '0');
 
         updateTimerElement("days1", daysStr[0]);
         updateTimerElement("days2", daysStr[1]);
@@ -45,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // Typing Effect
+    // typing effect
     const titleElement = document.querySelector(".countdown-title");
     const texts = ["save the date", "habadu kayra!"];
     let textIndex = 0;
@@ -55,68 +61,117 @@ document.addEventListener('DOMContentLoaded', function () {
     function typeWriterEffect() {
         const currentText = texts[textIndex];
 
-        titleElement.textContent = isDeleting ? currentText.substring(0, charIndex - 1) : currentText.substring(0, charIndex + 1);
-        charIndex += isDeleting ? -1 : 1;
+        if (!isDeleting) {
+            titleElement.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
 
-        if (!isDeleting && charIndex === currentText.length) {
-            setTimeout(() => { isDeleting = true; typeWriterEffect(); }, textIndex === 1 ? 6000 : 2000);
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            textIndex = (textIndex + 1) % texts.length;
+            if (charIndex === currentText.length) {
+                let delay = textIndex === 1 ? 6000 : 2000;
+                setTimeout(() => {
+                    isDeleting = true;
+                    typeWriterEffect();
+                }, delay);
+                return;
+            }
+        } else {
+            titleElement.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+
+            if (charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % texts.length;
+            }
         }
 
-        setTimeout(typeWriterEffect, isDeleting ? 100 : 200);
+        let speed = isDeleting ? 100 : 200;
+        setTimeout(typeWriterEffect, speed);
     }
 
     typeWriterEffect();
 
-    // Candle Mechanics
-    function updateCandleCount() {
-        candleCountDisplay.textContent = candles.filter(c => !c.classList.contains("out")).length;
+    // birthday card
+    function resetCandles() {
+        candles.forEach(candle => candle.remove());
+        candles = [];
+        updateCandleCount();
     }
+
+    function startConfetti() {
+        const confettiContainer = document.createElement("div");
+        confettiContainer.classList.add("confetti-container");
+        document.body.appendChild(confettiContainer);
+    
+        for (let i = 0; i < 100; i++) {
+            let confettiPiece = document.createElement("div");
+            confettiPiece.classList.add("confetti");
+            confettiPiece.style.left = Math.random() * 100 + "vw";
+            confettiPiece.style.animationDuration = Math.random() * 3 + 2 + "s";
+            confettiPiece.style.backgroundColor = 
+                `hsl(${Math.random() * 360}, 100%, 50%)`;
+            confettiContainer.appendChild(confettiPiece);
+        }
+    
+        setTimeout(() => {
+            confettiContainer.remove();
+        }, 5000);
+    }
+    
+    cake.addEventListener("click", function (event) {
+        const rect = cake.getBoundingClientRect();
+        const left = event.clientX - rect.left;
+        const top = event.clientY - rect.top;
+        addCandle(left, top);
+    });
 
     function addCandle(left, top) {
         const candle = document.createElement("div");
         candle.className = "candle";
-        candle.style.left = `${left}px`;
-        candle.style.top = `${top}px`;
-        
+        candle.style.left = left + "px";
+        candle.style.top = top + "px";
+    
         const flame = document.createElement("div");
         flame.className = "flame";
         candle.appendChild(flame);
-        
+    
         cake.appendChild(candle);
         candles.push(candle);
         updateCandleCount();
     }
 
-    cake.addEventListener("click", function (event) {
-        const rect = cake.getBoundingClientRect();
-        addCandle(event.clientX - rect.left, event.clientY - rect.top);
-    });
+    function updateCandleCount() {
+        candleCountDisplay.textContent = candles.filter(c => !c.classList.contains("out")).length;
+    }
 
     function isBlowing() {
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
         analyser.getByteFrequencyData(dataArray);
-        return dataArray.reduce((sum, val) => sum + val, 0) / bufferLength > 40;
+        return dataArray.reduce((sum, val) => sum + val, 0) / bufferLength > 50;
     }
 
     function blowOutCandles() {
-        if (candles.length === 0) return;
-        
-        let blownOut = 0;
+        if (candles.length === 0) {
+            return;
+        }
+    
         if (isBlowing()) {
+            let allCandlesOut = true;
+    
             candles.forEach(candle => {
-                if (!candle.classList.contains("out") && Math.random() > 0.5) {
+                if (!candle.classList.contains("out")) {
                     candle.classList.add("out");
-                    candle.querySelector(".flame").style.display = "none";
-                    blownOut++;
                 }
             });
+    
+            updateCandleCount();
+    
+            allCandlesOut = candles.every(candle => candle.classList.contains("out"));
+    
+            if (allCandlesOut) {
+                console.log("All candles blown out! 🎉");
+                startConfetti();
+            }
         }
-
-        if (blownOut > 0) updateCandleCount();
     }
 
     function requestMicrophoneAccess() {
@@ -135,23 +190,27 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
-
+    
     window.openBdayCard = function () {
         cardContainer.style.display = "flex";
-        if (!micPermissionGranted) requestMicrophoneAccess();
+        if (!micPermissionGranted) {
+            requestMicrophoneAccess();
+        }
     };
 
-    card.addEventListener("click", function () {
+    function toggleCard(event) {
+        event.stopPropagation();
         if (card.classList.contains("open")) {
             card.classList.remove("open");
             audio.pause();
             audio.currentTime = 0;
-            candles.forEach(candle => candle.remove());
-            candles = [];
-            updateCandleCount();
+            if (confettiActive) stopConfetti();
+            resetCandles();
         } else {
             card.classList.add("open");
             audio.play();
         }
-    });
+    }
+
+    card.addEventListener("click", toggleCard);
 });
