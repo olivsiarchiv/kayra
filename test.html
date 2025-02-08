@@ -615,13 +615,17 @@
             };
 
             function openCard(event) {
-                event.stopPropagation();
-                if (card.classList.contains("open")) {
-                    card.classList.remove("open");
-                    audio.pause();
-                    audio.currentTime = 0;
-                    resetCandles();
-                } else {
+                // event.stopPropagation();
+                // if (card.classList.contains("open")) {
+                //     card.classList.remove("open");
+                //     audio.pause();
+                //     audio.currentTime = 0;
+                //     resetCandles();
+                // } else {
+                //     card.classList.add("open");
+                //     audio.play();
+                // }
+                if (!card.classList.contains("open")) {
                     card.classList.add("open");
                     audio.play();
                 }
