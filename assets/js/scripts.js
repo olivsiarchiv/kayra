@@ -9,10 +9,11 @@ document.addEventListener('DOMContentLoaded', function () {
     let audioContext;
     let analyser;
     let microphone;
-    let confettiInterval;
     let confettiActive = false;
     let micPermissionGranted = false;
+    let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+    
     // countdown timer
     function updateTimerElement(id, value) {
         document.getElementById(id).textContent = value;
@@ -102,33 +103,45 @@ document.addEventListener('DOMContentLoaded', function () {
         const confettiContainer = document.createElement("div");
         confettiContainer.classList.add("confetti-container");
         document.body.appendChild(confettiContainer);
-    
+        
         for (let i = 0; i < 100; i++) {
             let confettiPiece = document.createElement("div");
             confettiPiece.classList.add("confetti");
             confettiPiece.style.left = Math.random() * 100 + "vw";
-            confettiPiece.style.animationDuration = Math.random() * 3 + 2 + "s";
             confettiPiece.style.backgroundColor = 
                 `hsl(${Math.random() * 360}, 100%, 50%)`;
+            confettiPiece.style.animationDuration = Math.random() * 3 + 2 + "s";
             confettiContainer.appendChild(confettiPiece);
         }
-    
+        
         setTimeout(() => {
             confettiContainer.remove();
         }, 5000);
     }
     
-    cake.addEventListener("click", function (event) {
+     // Update event listeners for both click and touch
+     cake.addEventListener("click", function(event) {
         event.stopPropagation();
-        const rect = cake.getBoundingClientRect();
-        addCandle(event.clientX - rect.left, event.clientY - rect.top);
+        if (isMobile && candles.length > 0) {
+            handleMobileBlowOut();
+        } else {
+            addCandle(event.clientX, event.clientY);
+        }
     });
 
-    function addCandle(left, top) {
+    cake.addEventListener("touchstart", handleTouch);
+
+    function addCandle(clientX, clientY) {
+        const rect = cake.getBoundingClientRect();
+        const relativeX = clientX - rect.left;
+        const relativeY = clientY - rect.top;
+        
         const candle = document.createElement("div");
         candle.className = "candle";
-        candle.style.left = `${left}px`;
-        candle.style.top = `${top}px`;
+        
+        // Adjust position to be relative to the cake's dimensions
+        candle.style.left = `${relativeX}px`;
+        candle.style.top = `${relativeY - 20}px`; // Offset to position candle better
         
         const flame = document.createElement("div");
         flame.className = "flame";
@@ -137,6 +150,31 @@ document.addEventListener('DOMContentLoaded', function () {
         cake.appendChild(candle);
         candles.push(candle);
         updateCandleCount();
+    }
+
+    // Mobile-specific touch handler
+    function handleTouch(event) {
+        event.preventDefault(); // Prevent scrolling
+        const touch = event.touches[0];
+        if (candles.length > 0) {
+            handleMobileBlowOut();
+        } else {
+            addCandle(touch.clientX, touch.clientY);
+        }
+    }
+
+    // Handle mobile blow out
+    function handleMobileBlowOut() {
+        if (candles.length === 0) return;
+
+        candles.forEach(candle => {
+            if (!candle.classList.contains("out")) {
+                candle.classList.add("out");
+            }
+        });
+
+        updateCandleCount();
+        startConfetti();
     }
 
     function updateCandleCount() {
