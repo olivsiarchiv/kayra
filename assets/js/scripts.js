@@ -91,7 +91,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     cake.addEventListener("click", function (event) {
-        event.stopPropagation();
         const rect = cake.getBoundingClientRect();
         addCandle(event.clientX - rect.left, event.clientY - rect.top);
     });
@@ -111,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
             candles.forEach(candle => {
                 if (!candle.classList.contains("out") && Math.random() > 0.5) {
                     candle.classList.add("out");
+                    candle.querySelector(".flame").style.display = "none";
                     blownOut++;
                 }
             });
@@ -141,8 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!micPermissionGranted) requestMicrophoneAccess();
     };
 
-    card.addEventListener("click", function (event) {
-        event.stopPropagation();
+    card.addEventListener("click", function () {
         if (card.classList.contains("open")) {
             card.classList.remove("open");
             audio.pause();
