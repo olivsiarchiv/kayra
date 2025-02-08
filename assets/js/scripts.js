@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    cake.addEventListener("touchstart", handleTouch);
+    cake.addEventListener("touchend", handleTouch);
 
     function addCandle(clientX, clientY) {
         const rect = cake.getBoundingClientRect();
@@ -152,10 +152,15 @@ document.addEventListener('DOMContentLoaded', function () {
         updateCandleCount();
     }
 
+    // Mobile-specific touch handler
     function handleTouch(event) {
-        event.preventDefault();
-        const touch = event.touches[0] || event.changedTouches[0];  // Ensure proper touch event detection
-        addCandle(touch.clientX, touch.clientY);
+        event.preventDefault(); // Prevent scrolling
+        const touch = event.touches[0];
+        if (candles.length > 0) {
+            handleMobileBlowOut();
+        } else {
+            addCandle(touch.clientX, touch.clientY);
+        }
     }
 
     // Handle mobile blow out
