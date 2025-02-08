@@ -628,6 +628,12 @@
             }
             card.addEventListener("click", openCard);
 
+            function resetCandles() {
+                candles.forEach(candle => candle.remove());
+                candles = [];
+                updateCandleCount();
+            }
+
             function updateCandleCount() {
                 const activeCandles = candles.filter(
                 (candle) => !candle.classList.contains("out")
@@ -651,6 +657,7 @@
             }
 
             cake.addEventListener("click", function (event) {
+                event.stopPropagation();
                 const rect = cake.getBoundingClientRect();
                 const left = event.clientX - rect.left;
                 const top = event.clientY - rect.top;
