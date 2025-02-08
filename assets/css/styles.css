@@ -363,6 +363,13 @@ body {
     box-shadow: 0 0 20px rgba(255, 140, 0, 0.5), 0 0 40px rgba(255, 69, 0, 0.5);
     transform-origin: center bottom;
     animation: flicker 0.5s infinite alternate ease-in-out, glow 1s infinite alternate;
+<<<<<<< HEAD
+=======
+    
+    /* Safari fix */
+    -webkit-animation: flicker 0.5s infinite alternate ease-in-out, glow 1s infinite alternate;
+    will-change: transform, opacity; /* Improves rendering */
+>>>>>>> 2be55b0da96e8c810923b1c9d29157b968700816
 }
 
 @keyframes flicker {
@@ -372,6 +379,7 @@ body {
     }
     25% {
         transform: scaleX(1.1) skewX(-5deg);
+<<<<<<< HEAD
         opacity: 0.8;
     }
     50% {
@@ -381,6 +389,17 @@ body {
     75% {
         transform: scaleX(0.9) skewX(-10deg);
         opacity: 0.7;
+=======
+        opacity: 0.85;
+    }
+    50% {
+        transform: scaleX(1.2) skewX(10deg);
+        opacity: 0.8;
+    }
+    75% {
+        transform: scaleX(0.9) skewX(-10deg);
+        opacity: 0.85;
+>>>>>>> 2be55b0da96e8c810923b1c9d29157b968700816
     }
     100% {
         transform: scaleX(1) skewX(5deg);
@@ -388,6 +407,33 @@ body {
     }
 }
 
+<<<<<<< HEAD
+=======
+/* Safari-compatible animation */
+@-webkit-keyframes flicker {
+    0% {
+        -webkit-transform: scaleX(1) skewX(5deg);
+        opacity: 0.9;
+    }
+    25% {
+        -webkit-transform: scaleX(1.1) skewX(-5deg);
+        opacity: 0.85;
+    }
+    50% {
+        -webkit-transform: scaleX(1.2) skewX(10deg);
+        opacity: 0.8;
+    }
+    75% {
+        -webkit-transform: scaleX(0.9) skewX(-10deg);
+        opacity: 0.85;
+    }
+    100% {
+        -webkit-transform: scaleX(1) skewX(5deg);
+        opacity: 0.9;
+    }
+}
+
+>>>>>>> 2be55b0da96e8c810923b1c9d29157b968700816
 @keyframes glow {
     0% {
         box-shadow: 0 0 15px rgba(255, 140, 0, 0.4), 0 0 30px rgba(255, 69, 0, 0.4);
@@ -397,6 +443,20 @@ body {
     }
 }
 
+<<<<<<< HEAD
+=======
+/* Safari-compatible glow animation */
+@-webkit-keyframes glow {
+    0% {
+        box-shadow: 0 0 15px rgba(255, 140, 0, 0.4), 0 0 30px rgba(255, 69, 0, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(255, 140, 0, 0.6), 0 0 50px rgba(255, 69, 0, 0.6);
+    }
+}
+
+
+>>>>>>> 2be55b0da96e8c810923b1c9d29157b968700816
 
 .back {
     font-family: Tahoma, sans-serif;

@@ -152,15 +152,10 @@ document.addEventListener('DOMContentLoaded', function () {
         updateCandleCount();
     }
 
-    // Mobile-specific touch handler
     function handleTouch(event) {
-        event.preventDefault(); // Prevent scrolling
-        const touch = event.touches[0];
-        if (candles.length > 0) {
-            handleMobileBlowOut();
-        } else {
-            addCandle(touch.clientX, touch.clientY);
-        }
+        event.preventDefault();
+        const touch = event.touches[0] || event.changedTouches[0];  // Ensure proper touch event detection
+        addCandle(touch.clientX, touch.clientY);
     }
 
     // Handle mobile blow out
