@@ -698,7 +698,20 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const birthdayDate = new Date("2025-02-10T00:00:00");
+            // Configuration and Constants
+            const birthdayDate = new Date("2025-02-11T00:00:00");
+            const texts = ["save the date", "habadu kayra!"];
+            
+            // Audio Elements
+            const countdownMusic = new Audio("assets/img/start-song.mp3");
+            countdownMusic.loop = true;
+            countdownMusic.volume = 0.5;
+        
+            const openMeMusic = new Audio("assets/img/bday-song-6.mp3");
+            openMeMusic.loop = true;
+            openMeMusic.volume = 0.5;
+        
+            // DOM Element Selections
             const titleElement = document.querySelector(".countdown-title");
             const countdownContainer = document.querySelector(".countdown-container");
             const card = document.querySelector(".bdayCard");
@@ -710,23 +723,149 @@
             const countdownTimer = document.getElementById("countdown");
             const audio = document.getElementById("audio");
             const cake = document.querySelector(".cake");
+        
+            // State Variables
             let confettiInterval;
             let isCountdownOver = false;
             let candles = [];
             let audioContext;
             let analyser;
             let microphone;
-
+            let textIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+        
+            // Utility Functions
             function updateTimerElement(id, value) {
                 document.getElementById(id).textContent = value;
             }
 
+            // User Interaction Event to Play Audio (Solution 1)
+            function playMusicOnInteraction() {
+                countdownMusic.play().catch(error => console.error("Audio play failed:", error));
+                document.body.removeEventListener("click", playMusicOnInteraction);
+                document.body.removeEventListener("touchstart", playMusicOnInteraction);
+            }
+
+            document.body.addEventListener("click", playMusicOnInteraction);
+            document.body.addEventListener("touchstart", playMusicOnInteraction);
+        
+            // Countdown Functions
+            function updateCountdown() {
+                const now = new Date();
+                const timeDiff = birthdayDate - now;
+        
+                if (timeDiff <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownMusic.play();
+                    document.getElementById('gifEnvelope');
+                    document.getElementById('countdown');
+                    document.querySelector('.greeting-btn').style.display = "block";
+        
+                    isCountdownOver = true;
+                    titleElement.textContent = "🎉 HABADU KHAIRA 🎉";
+                    startConfettiEffect();
+                    document.getElementById("bg-video-3").classList.add("show-bg");
+                    return;
+                }
+        
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+        
+                const daysStr = String(days).padStart(2, '0');
+                const hoursStr = String(hours).padStart(2, '0');
+                const minutesStr = String(minutes).padStart(2, '0');
+                const secondsStr = String(seconds).padStart(2, '0');
+        
+                updateTimerElement("days1", daysStr[0]);
+                updateTimerElement("days2", daysStr[1]);
+                updateTimerElement("hours1", hoursStr[0]);
+                updateTimerElement("hours2", hoursStr[1]);
+                updateTimerElement("minutes1", minutesStr[0]);
+                updateTimerElement("minutes2", minutesStr[1]);
+                updateTimerElement("seconds1", secondsStr[0]);
+                updateTimerElement("seconds2", secondsStr[1]);
+            }
+            const countdownInterval = setInterval(updateCountdown, 1000);
+            updateCountdown();
+        
+            // Text Animation Functions
+            function typeWriterEffect() {
+                if (isCountdownOver) return;
+        
+                const currentText = texts[textIndex];
+        
+                if (!isDeleting) {
+                    titleElement.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+        
+                    if (charIndex === currentText.length) {
+                        let delay = textIndex === 1 ? 6000 : 2000;
+                        setTimeout(() => {
+                            isDeleting = true;
+                            typeWriterEffect();
+                        }, delay);
+                        return;
+                    }
+                } else {
+                    titleElement.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+        
+                    if (charIndex === 0) {
+                        isDeleting = false;
+                        textIndex = (textIndex + 1) % texts.length;
+                    }
+                }
+        
+                let speed = isDeleting ? 100 : 200;
+                setTimeout(typeWriterEffect, speed);
+            }
+            typeWriterEffect();
+        
+            // Confetti and Animation Functions
+            function startConfettiEffect() {
+                const confettiContainer = document.createElement("div");
+                confettiContainer.classList.add("confetti-container");
+                document.body.appendChild(confettiContainer);
+        
+                confettiInterval = setInterval(() => {
+                    for (let i = 0; i < 50; i++) {
+                        let confettiPiece = document.createElement("div");
+                        confettiPiece.classList.add("confetti-start");
+        
+                        let side = Math.random() < 0.5 ? "left" : "right"; 
+                        confettiPiece.style.position = "fixed";
+                        confettiPiece.style.bottom = "0px";
+                        confettiPiece.style.left = Math.random() * 100 + "vw";
+        
+                        confettiPiece.style.width = Math.random() * 10 + 5 + "px";
+                        confettiPiece.style.height = Math.random() * 5 + 3 + "px";
+                        confettiPiece.style.backgroundColor = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF"][Math.floor(Math.random() * 4)];
+        
+                        confettiPiece.style.animation = `confetti-fall-start ${Math.random() * 2 + 2}s linear infinite`;
+                        confettiContainer.appendChild(confettiPiece);
+        
+                        setTimeout(() => confettiPiece.remove(), 3000);
+                    }
+                }, 300);
+            }
+        
+            function stopConfettiEffect() {
+                clearInterval(confettiInterval);
+                document.querySelector(".confetti-container")?.remove();
+                countdownMusic.pause();
+                countdownMusic.currentTime = 0;
+            }
+        
+            // Background and Video Functions
             function animateText() {
                 const existingVideo = document.getElementById("bg-video-1");
                 if (existingVideo) existingVideo.remove();
-
+        
                 if (document.getElementById("bgVideo")) return;
-
+        
                 const video = document.createElement("video");
                 video.id = "bg-video-1";
                 video.src = "assets/img/kayra-bid-1.mp4";
@@ -744,121 +883,11 @@
                 video.style.objectFit = "cover";
                 video.style.zIndex = "-1";
                 video.setAttribute("playsinline", "");
-
+        
                 document.body.appendChild(video);
             }
-
-            function updateCountdown() {
-                const now = new Date();
-                const timeDiff = birthdayDate - now;
-
-                if (timeDiff <= 0) {
-                    clearInterval(countdownInterval);
-                    document.getElementById('gifEnvelope');
-                    document.getElementById('countdown');
-                    document.querySelector('.greeting-btn').style.display = "block";
-
-                    isCountdownOver = true;
-                    titleElement.textContent = "🎉 HABADU KHAIRA 🎉";
-                    startConfettiEffect();
-                    document.getElementById("bg-video-3").classList.add("show-bg");
-                    return;
-                }
-
-                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-                const daysStr = String(days).padStart(2, '0');
-                const hoursStr = String(hours).padStart(2, '0');
-                const minutesStr = String(minutes).padStart(2, '0');
-                const secondsStr = String(seconds).padStart(2, '0');
-
-                updateTimerElement("days1", daysStr[0]);
-                updateTimerElement("days2", daysStr[1]);
-                updateTimerElement("hours1", hoursStr[0]);
-                updateTimerElement("hours2", hoursStr[1]);
-                updateTimerElement("minutes1", minutesStr[0]);
-                updateTimerElement("minutes2", minutesStr[1]);
-                updateTimerElement("seconds1", secondsStr[0]);
-                updateTimerElement("seconds2", secondsStr[1]);
-            }
-            const countdownInterval = setInterval(updateCountdown, 1000);
-            updateCountdown();
-
-            const texts = ["save the date", "habadu kayra!"];
-            let textIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-
-            function typeWriterEffect() {
-                if (isCountdownOver) return;
-
-                const currentText = texts[textIndex];
-
-                if (!isDeleting) {
-                    titleElement.textContent = currentText.substring(0, charIndex + 1);
-                    charIndex++;
-
-                    if (charIndex === currentText.length) {
-                        let delay = textIndex === 1 ? 6000 : 2000;
-                        setTimeout(() => {
-                            isDeleting = true;
-                            typeWriterEffect();
-                        }, delay);
-                        return;
-                    }
-                } else {
-                    titleElement.textContent = currentText.substring(0, charIndex - 1);
-                    charIndex--;
-
-                    if (charIndex === 0) {
-                        isDeleting = false;
-                        textIndex = (textIndex + 1) % texts.length;
-                    }
-                }
-
-                let speed = isDeleting ? 100 : 200;
-                setTimeout(typeWriterEffect, speed);
-            }
-
-            typeWriterEffect();
-            
-            function startConfettiEffect() {
-                const confettiContainer = document.createElement("div");
-                confettiContainer.classList.add("confetti-container");
-                document.body.appendChild(confettiContainer);
-
-                confettiInterval = setInterval(() => {
-                    for (let i = 0; i < 50; i++) {
-                        let confettiPiece = document.createElement("div");
-                        confettiPiece.classList.add("confetti-start");
-
-                        let side = Math.random() < 0.5 ? "left" : "right"; 
-                        confettiPiece.style.position = "fixed";
-                        confettiPiece.style.bottom = "0px";
-                        confettiPiece.style.left = Math.random() * 100 + "vw";
-
-                        confettiPiece.style.width = Math.random() * 10 + 5 + "px";
-                        confettiPiece.style.height = Math.random() * 5 + 3 + "px";
-                        confettiPiece.style.backgroundColor = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF"][Math.floor(Math.random() * 4)];
-
-                        confettiPiece.style.animation = `confetti-fall-start ${Math.random() * 2 + 2}s linear infinite`;
-                        confettiContainer.appendChild(confettiPiece);
-
-                        setTimeout(() => confettiPiece.remove(), 3000);
-                    }
-                }, 300);
-            }
-
-            function stopConfettiEffect() {
-                clearInterval(confettiInterval);
-                document.querySelector(".confetti-container")?.remove();
-            }
-
-            greetingBtn.addEventListener("click", stopConfettiEffect);
-
+        
+            // Open Greeting and Card Functions
             window.openGreeting = function () {
                 titleElement.style.display = "none";
                 gifEnvelope.style.display = "none";
@@ -877,14 +906,14 @@
             window.openBdayCard = function() {
                 countdownContainer.style.display = "none";
                 cardContainer.style.display = "flex";
-
+        
                 const existingVideo = document.getElementById("bg-video-1");
                 if (existingVideo) {
                     existingVideo.pause();
                     existingVideo.src = "";
                     existingVideo.remove();
                 }
-
+        
                 const bdayVideo = document.createElement("video");
                 bdayVideo.id = "bg-video-2"; 
                 bdayVideo.src = "assets/img/kayra-bid-2.mp4"; 
@@ -902,55 +931,127 @@
                 bdayVideo.style.objectFit = "cover";
                 bdayVideo.style.zIndex = "-1";
                 bdayVideo.setAttribute("playsinline", "");
-
-                // Append the new video
+        
                 document.body.appendChild(bdayVideo);
             };
-
+        
+            // Candle and Blowing Functions
+            function resetCandles() {
+                candles.forEach(candle => candle.remove());
+                candles = [];
+            }
+        
+            function addCandle(left, top) {
+                const candle = document.createElement("div");
+                candle.className = "candle";
+                candle.style.left = left + "px";
+                candle.style.top = top + "px";
+        
+                const flame = document.createElement("div");
+                flame.className = "flame";
+                candle.appendChild(flame);
+        
+                cake.appendChild(candle);
+                candles.push(candle);
+        
+                addCandleSound();
+            }
+        
+            function addCandleSound() {
+                const candleAudio = new Audio("assets/img/audio-tap.mp3");
+                candleAudio.play();
+            }
+        
+            function isBlowing() {
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                analyser.getByteFrequencyData(dataArray);
+        
+                let sum = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    sum += dataArray[i];
+                }
+                let average = sum / bufferLength;
+        
+                return average > 40;
+            }
+        
+            function blowOutCandles() {
+                let anyCandleBlown = false;
+                candles.forEach((candle, index) => {
+                    if (!candle.classList.contains("out")) {
+                        setTimeout(() => {
+                            if (isBlowing() && Math.random() > 0.5) {
+                                candle.classList.add("out");
+                                anyCandleBlown = true;
+                            }
+        
+                            if (anyCandleBlown) {
+                                triggerConfetti();
+                            }
+                        }, index * 500);
+                    }
+                });
+            }
+        
+            function triggerConfetti() {
+                const confettiContainer = document.createElement("div");
+                confettiContainer.classList.add("confetti-container");
+                document.body.appendChild(confettiContainer);
+        
+                const colors = ["#49108B", "#7E30E1", "#E26EE5", "#9F70FD", "#B7C9F2", "#F5DD61"];
+        
+                for (let i = 0; i < 100; i++) {
+                    let confettiPiece = document.createElement("div");
+                    confettiPiece.classList.add("confetti");
+                    
+                    confettiPiece.style.left = Math.random() * 100 + "vw";
+                    confettiPiece.style.animationDuration = Math.random() * 3 + 2 + "s";
+                    confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+                    confettiPiece.style.width = Math.random() * 15 + 5 + "px";
+                    confettiPiece.style.height = Math.random() * 5 + 3 + "px";
+        
+                    const rotationStart = Math.random() * 360 + "deg";
+                    const rotationEnd = Math.random() * 720 + "deg";
+                    confettiPiece.style.setProperty("--rotation-start", rotationStart);
+                    confettiPiece.style.setProperty("--rotation-end", rotationEnd);
+        
+                    confettiContainer.appendChild(confettiPiece);
+                }
+        
+                setTimeout(() => {
+                    confettiContainer.remove();
+                }, 5000);
+            }
+        
+            // Event Listeners
+            greetingBtn.addEventListener("click", stopConfettiEffect);
+        
+            openMeBtn.addEventListener("click", function() {
+                openMeMusic.play();
+            });
+        
             function openCard(event) {
                 event.stopPropagation();
                 if (card.classList.contains("open")) {
                     card.classList.remove("open", "opened");
                     audio.pause();
                     audio.currentTime = 0;
+                    openMeMusic.play();
                     resetCandles();
                 } else {
                     card.classList.add("open", "opened");
                     audio.play();
+                    openMeMusic.pause();
                 }
             }
             card.addEventListener("pointerdown", openCard);
-
-            function resetCandles() {
-                candles.forEach(candle => candle.remove());
-                candles = [];
-            }
-
-            function addCandle(left, top) {
-                const candle = document.createElement("div");
-                candle.className = "candle";
-                candle.style.left = left + "px";
-                candle.style.top = top + "px";
-
-                const flame = document.createElement("div");
-                flame.className = "flame";
-                candle.appendChild(flame);
-
-                cake.appendChild(candle);
-                candles.push(candle);
-
-                addCandleSound();
-            }
-
-            function addCandleSound() {
-                const candleAudio = new Audio("assets/img/audio-tap.mp3");
-                candleAudio.play();
-            }
-
+        
             cake.addEventListener("pointerdown", function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-
+        
                 let x, y;
                 if (event.touches) {
                     x = event.touches[0].clientX;
@@ -965,70 +1066,8 @@
                 const top = event.clientY - rect.top;
                 addCandle(left, top);
             });
-
-            function isBlowing() {
-                const bufferLength = analyser.frequencyBinCount;
-                const dataArray = new Uint8Array(bufferLength);
-                analyser.getByteFrequencyData(dataArray);
-
-                let sum = 0;
-                for (let i = 0; i < bufferLength; i++) {
-                sum += dataArray[i];
-                }
-                let average = sum / bufferLength;
-
-                return average > 40;
-            }
-
-            function blowOutCandles() {
-                let anyCandleBlown = false;
-                candles.forEach((candle, index) => {
-                    if (!candle.classList.contains("out")) {
-                        setTimeout(() => {
-                            if (isBlowing() && Math.random() > 0.5) {
-                                candle.classList.add("out");
-                                anyCandleBlown = true;
-                            }
-
-                            if (anyCandleBlown) {
-                                triggerConfetti();
-                            }
-                        }, index * 500);
-                    }
-                });
-            }
-
-            function triggerConfetti() {
-                const confettiContainer = document.createElement("div");
-                confettiContainer.classList.add("confetti-container");
-                document.body.appendChild(confettiContainer);
-
-                const colors = ["#49108B", "#7E30E1", "#E26EE5", "#9F70FD", "#B7C9F2", "#F5DD61"];
-
-                for (let i = 0; i < 100; i++) {
-                    let confettiPiece = document.createElement("div");
-                    confettiPiece.classList.add("confetti");
-                    
-                    confettiPiece.style.left = Math.random() * 100 + "vw";
-                    confettiPiece.style.animationDuration = Math.random() * 3 + 2 + "s";
-                    confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-
-                    confettiPiece.style.width = Math.random() * 15 + 5 + "px";
-                    confettiPiece.style.height = Math.random() * 5 + 3 + "px";
-
-                    const rotationStart = Math.random() * 360 + "deg";
-                    const rotationEnd = Math.random() * 720 + "deg";
-                    confettiPiece.style.setProperty("--rotation-start", rotationStart);
-                    confettiPiece.style.setProperty("--rotation-end", rotationEnd);
-
-                    confettiContainer.appendChild(confettiPiece);
-                }
-
-                setTimeout(() => {
-                    confettiContainer.remove();
-                }, 5000);
-            }
-
+        
+            // Microphone and Audio Setup
             if (navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices
                 .getUserMedia({ audio: true })
@@ -1046,6 +1085,14 @@
             } else {
                 console.log("getUserMedia not supported on your browser!");
             }
+        
+            // Unload Event Listener
+            window.addEventListener('beforeunload', () => {
+                countdownMusic.pause();
+                countdownMusic.currentTime = 0;
+                openMeMusic.pause();
+                openMeMusic.currentTime = 0;
+            });
         });
     </script>
   </body>
