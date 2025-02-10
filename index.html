@@ -1,5 +1,1059 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HBD KHAIRA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Birthstone+Bounce:wght@400;500&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap');
+
+        @font-face {
+            font-family: 'khairaFont';
+            src: url('assets/img/Autumn\ in\ November.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'hbdFont';
+            src: url('assets/img/WorkSans-Bold.ttf') format('truetype');
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #cecbbe;
+            font-family: "Hanken Grotesk", serif;
+            overflow-x: hidden;
+            }
+
+        #bg-video-3 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .hidden-bg {
+            display: none; /* Keeps the video hidden until triggered */
+        }
+
+        .show-bg {
+            display: block; /* This will be applied to show the video */
+        }
+
+        .countdown-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: calc(100% - 2rem);
+            max-width: 1500px;
+            height: auto;
+        }
+
+            .countdown-body {
+                text-align: center;
+                width: 100%;
+                max-width: 1200px;
+                height: auto;
+                padding: 1.5rem;
+            }
+
+            .countdown-title-body {
+                display: flex;
+                justify-content: center;
+                text-align: center;
+                align-items: center;
+                text-wrap: nowrap;
+                overflow: visible;
+            }
+
+            .countdown-title {
+                font-size: clamp(35px, 2vw, 40px);
+                font-weight: bold;
+                color: black;
+                white-space: nowrap;
+                display: inline-block;
+                margin: 0;
+                padding: 0;
+            }
+
+            .confetti-start {
+                position: fixed;
+                bottom: 0;
+                width: 8px;
+                height: 8px;
+                opacity: 1;
+            }
+
+            @keyframes confetti-fall-start {
+                0% {
+                    transform: translateY(0) rotate(0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+
+            .sans-serif {
+                font-family: 'hbdFont', sans-serif;
+                font-size: 130px;
+                fill: transparent;
+                stroke: black;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation: draw 4s forwards, fillSans 1.3s forwards 2s;
+            }
+
+            .cursive {
+                font-family: 'khairaFont', cursive;
+                font-size: 400px;
+                fill: transparent;
+                stroke: black;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation: draw 8s forwards, fillCursive 3s forwards 4s;
+            }
+
+            @keyframes draw {
+                0% {
+                    stroke-dashoffset: 1000;
+                }
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+
+            @keyframes fillSans {
+                to {
+                    fill: black;
+                }
+            }
+
+            @keyframes fillCursive {
+                to {
+                    fill: #b9313a;
+                    stroke: #b9313a;
+                }
+            }
+
+            .countdown-gif {
+                display: flex;
+                justify-content: center;
+                margin: 1.5rem 0;
+            }
+
+            .countdown-gif img {
+                width: clamp(300px, 40vw, 400px);
+                height: auto;
+                max-width: 100%;
+            }
+
+            .countdown-timer {
+                display: flex;
+                justify-content: center;
+                gap: clamp(0.1rem, 1vw, 0.5rem);
+            }
+
+            .timer-segment {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .timer-item-container {
+                display: flex;
+                gap: clamp(0.05rem, 1vw, 0.2rem);
+                justify-content: center;
+                align-items: center;
+            }
+
+            .timer-item {
+                background-color: #f8f4eb;
+                padding-left: clamp(6px, 1vw, 10px);
+                padding-right: clamp(6px, 1vw, 10px);
+                padding-top: clamp(3px, 1vw, 5px);
+                padding-bottom: clamp(3px, 1vw, 5px);
+                border-radius: 8px;
+                font-size: clamp(35px, 2vw, 40px);
+                font-weight: bolder;
+                text-align: center;
+            }
+
+            .timer-separator {
+                font-size: clamp(35px, 2vw, 40px);
+                font-weight: bold;
+            }
+
+            .timer-label {
+                margin-top: 0.5rem;
+                font-size: clamp(12px, 2vw, 18px);
+                color: #b9313a;
+            }
+
+            .btn-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 50px;
+                text-align: center;
+                padding-top: 1rem;
+            }
+
+            /* style for visible button for testing */
+            .greeting-btn {
+                display: none;
+                padding: 8px 30px;
+                font-size: 20px;
+                font-weight: bold;
+                background-color: #b9313a;
+                color: white;
+                border: none;
+                border-radius: 15px;
+                cursor: pointer;
+                border: 3px solid black;
+                box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.5);
+                cursor: pointer;
+                animation: borderAnimation 2s infinite alternate;
+            }
+
+            .openme-btn {
+                display: none;
+                position: absolute;
+                top: 80%;
+                left: 50%;
+                transform: translate(-50%);
+                padding: 8px 30px;
+                font-size: 20px;
+                font-weight: bold;
+                background-color: #b9313a;
+                color: white;
+                border: none;
+                border-radius: 15px;
+                cursor: pointer;
+                border: 3px solid black;
+                box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.5);
+                cursor: pointer;
+                animation: borderAnimation 2s infinite alternate;
+            }
+            
+            .openme-btn:hover {
+                background-color: #c75159;
+                color: #cecbbe;
+            }
+
+            @keyframes borderAnimation {
+                0% {
+                    box-shadow: 0 0 20px #49108B;
+                    background-color: #49108B;
+                }
+                25% {
+                    box-shadow: 0 0 20px #E26EE5;
+                    background-color: #E26EE5;
+                }
+                50% {
+                    box-shadow: 0 0 20px #aa82ae;
+                    background-color: #aa82ae;
+                }
+                75% {
+                    box-shadow: 0 0 20px #7E30E1;
+                    background-color: #7E30E1;
+                }
+                100% {
+                    box-shadow: 0 0 20px #9F70FD;
+                    background-color: #9F70FD;
+                }
+            }
+
+            .bday-card-container {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 20px;
+            }
+
+            .bdayCard {
+                border-radius: 30px;
+                position: relative;
+                width: 420px;
+                height: 500px;
+                transform-style: preserve-3d;
+                cursor: pointer;
+                transform: perspective(2000px);
+                transition: 1s;
+            }
+
+            .cardFront {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: 0 15px 15px 0;
+                overflow: hidden;
+                box-shadow: inset 100px 20px 100px rgba(0, 0, 0, 0.1), 30px 0 50px rgba(0, 0, 0, 0.1);
+                transition: 0.6s;
+                background-image: url('assets/img/1.png');
+                transform-origin: left;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                backface-visibility: visible;
+            }
+
+            .cardBackLeft {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                border-radius: 0 15px 15px 0;
+                background-image: url('assets/img/2.png');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                transform: rotateY(180deg);
+                backface-visibility: hidden;
+                transform-origin: left;
+            }
+
+            .cardInside {
+                position: absolute;
+                background-color: #f8f4eb;
+                width: 420px;
+                height: 500px;
+                z-index: -1;
+                left: 0;
+                border-radius: 0 15px 15px 0;
+                top: 0;
+                box-shadow: inset 100px 20px 100px rgba(191, 190, 190, 0.2);
+                background-image: url('assets/img/3.png');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+
+            .bdayCard.opened .cardFront {
+                transform: rotateY(-180deg);
+                backface-visibility: hidden;
+            }
+
+            .bdayCard.opened .cardBackLeft {
+                transform: rotateY(180deg);
+                backface-visibility: visible;
+                transition: 0.6s;
+            }
+
+            /* .candle-count-display {
+                text-align: center;
+                margin-top: 80px;
+                margin-bottom: 20px;
+                font-size: 20px;
+                font-weight: bold;
+                color: white;
+                background-color: #b9313a;
+                padding: 10px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                width: fit-content;
+                margin-left: auto;
+                margin-right: auto;
+                border: 2px solid black;
+            } */
+
+            .cake {
+                position: absolute;
+                width: 250px;
+                height: 200px;
+                top: 50%;
+                left: 50%;
+                margin-top: -70px;
+                margin-left: -125px;
+            }
+
+            .plate {
+                width: 290px;
+                height: 110px;
+                position: absolute;
+                bottom: -10px;
+                left: -20px;
+                background-color: #d1c9c1;
+                border-radius: 50%;
+                box-shadow: 0 2px 0 #b8aea3, 0 4px 0 #b8aea3, 0 5px 40px rgba(0, 0, 0, 0.5);
+            }
+
+            .cake > * {
+                position: absolute;
+            }
+
+            .layer {
+                position: absolute;
+                display: block;
+                width: 250px;
+                height: 100px;
+                border-radius: 50%;
+                background-color: #b9313a;
+                box-shadow: 
+                    0 2px 0px #9b1d20,
+                    0 4px 0px #9b1d20,
+                    0 6px 0px #fff5e1,
+                    0 8px 0px #fff5e1,
+                    0 10px 0px #fff5e1,
+                    0 12px 0px #fff5e1,
+                    0 14px 0px #9b1d20,
+                    0 16px 0px #9b1d20,
+                    0 18px 0px #9b1d20,
+                    0 20px 0px #9b1d20,
+                    0 22px 0px #9b1d20,
+                    0 24px 0px #9b1d20,
+                    inset 0 10px 15px rgba(255, 255, 255, 0.2),
+                    inset 0 -10px 15px rgba(0, 0, 0, 0.2);
+            }
+
+            .layer-top {
+                top: 0px;
+            }
+
+            .layer-middle {
+                top: 33px;
+            }
+
+            .layer-bottom {
+                top: 66px;
+            }
+
+            .icing {
+                top: 0;
+                left: 0;
+                width: 250px;
+                height: 95px;
+                border-radius: 50%;
+                background: linear-gradient(
+                        180deg,
+                        rgba(255,255,255,1) 0%,
+                        rgba(255,255,255,0.95) 50%,
+                        rgba(255,255,255,0.9) 100%
+                    );
+            }
+
+            .icing:before {
+                content: "";
+                position: absolute;
+                top: 4px;
+                right: 5px;
+                bottom: 6px;
+                left: 5px;
+                background-color: #fff;
+                box-shadow: 0 0 4px #fff, 0 0 4px #fff, 0 0 4px #fff;
+                border-radius: 50%;
+                z-index: 1;
+            }
+
+            .icing-shadow {
+                position: absolute;
+                top: 6px;
+                left: 0;
+                width: 250px;
+                height: 95px;
+                border-radius: 50%;
+                background-color: rgba(0, 0, 0, 0.1);
+                filter: blur(8px);
+                z-index: -1;
+            }
+
+            .candle {
+                background-color: #9b1d20;
+                width: 8px;
+                height: 50px;
+                border-radius: 6px/3px;
+                top: -30px;
+                left: 50%;
+                margin-left: -4px;
+                z-index: 10;
+            }
+
+            .candle:before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 8px;
+                height: 3px;
+                border-radius: 50%;
+                background-color: #b9313a;
+            }
+
+            .candle.out .flame {
+                display: none;
+            }
+
+            .flame {
+                position: absolute;
+                background: radial-gradient(circle at 50% 80%, #ffeb3b 20%, #ff9800 60%, #ff5722 90%);
+                width: 10px;
+                height: 25px;
+                border-radius: 50% 50% 40% 40%;
+                top: -34px;
+                left: 50%;
+                margin-left: -6px;
+                z-index: 10;
+                box-shadow: 
+                    0 0 15px rgba(255, 235, 59, 0.8), 
+                    0 0 25px rgba(255, 152, 0, 0.8), 
+                    0 0 40px rgba(255, 87, 34, 0.6);
+                transform-origin: 50% 90%;
+                animation: flicker 1s ease-in-out alternate infinite;
+            }
+
+            /* Flickering animation */
+            @keyframes flicker {
+                0% {
+                    transform: scaleY(1) skewX(3deg);
+                    opacity: 0.9;
+                    box-shadow: 
+                        0 0 10px rgba(255, 235, 59, 0.6), 
+                        0 0 20px rgba(255, 152, 0, 0.6), 
+                        0 0 30px rgba(255, 87, 34, 0.5);
+                }
+                25% {
+                    transform: scaleY(1.05) skewX(-3deg);
+                    opacity: 1;
+                    box-shadow: 
+                        0 0 15px rgba(255, 235, 59, 0.7), 
+                        0 0 25px rgba(255, 152, 0, 0.7), 
+                        0 0 35px rgba(255, 87, 34, 0.6);
+                }
+                50% {
+                    transform: scaleY(0.95) skewX(5deg);
+                    opacity: 0.85;
+                    box-shadow: 
+                        0 0 12px rgba(255, 235, 59, 0.5), 
+                        0 0 22px rgba(255, 152, 0, 0.5), 
+                        0 0 32px rgba(255, 87, 34, 0.4);
+                }
+                75% {
+                    transform: scaleY(1.1) skewX(-5deg);
+                    opacity: 0.95;
+                    box-shadow: 
+                        0 0 18px rgba(255, 235, 59, 0.8), 
+                        0 0 28px rgba(255, 152, 0, 0.8), 
+                        0 0 38px rgba(255, 87, 34, 0.7);
+                }
+                100% {
+                    transform: scaleY(1) skewX(2deg);
+                    opacity: 0.9;
+                    box-shadow: 
+                        0 0 15px rgba(255, 235, 59, 0.7), 
+                        0 0 25px rgba(255, 152, 0, 0.7), 
+                        0 0 35px rgba(255, 87, 34, 0.6);
+                }
+            }
+
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .confetti {
+            position: absolute;
+            top: -10px;
+            width: 10px;
+            height: 10px;
+            transform-origin: center;
+            animation: confetti-fall 5s ease-in-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(var(--rotation-start));
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(var(--rotation-end));
+                opacity: 0;
+            }
+        }
+
+        .back {
+            font-family: Tahoma, sans-serif;
+            color: #333;
+            text-align: center;
+            margin: 30px;
+        }
+
+        .bdayCard.open {
+            transform: perspective(2500px) rotate(0deg);
+            box-shadow: inset 100px 20px 100px rgba(116, 115, 115, 0.5),
+            0 10px 100px rgba(116, 115, 115, 0.5);
+        }
+
+        .bdayCard.open .cardFront {
+            transform: rotateY(-160deg);
+            background-color: #f8f4eb;
+        }
+
+        .bdayCard.open .happy {
+            visibility: hidden;
+        }
+    </style>
+  </head>
+  <body>
+    <video id="bg-video-3" class="hidden-bg" autoplay loop muted>
+        <source src="assets/img/kayra-bid-3.mp4" type="video/mp4">
+    </video>
+    <div class="container countdown-container">
+        <div class="countdown-body">
+            <div class="countdown-title-body">
+                <h1 class="countdown-title"></h1>
+            </div>
+            <div class="countdown-gif" id="gifEnvelope">
+                <img src="assets/img/countdown-env.gif" alt="" class="img-fluid">
+            </div>
+            <div class="countdown-timer" id="countdown">
+                <div class="timer-segment">
+                    <div class="timer-item-container">
+                        <span id="days1" class="timer-item">0</span>
+                        <span id="days2" class="timer-item">0</span>
+                    </div>
+                    <div class="timer-label">Days</div>
+                </div>
+                <span class="timer-separator">:</span>
+                <div class="timer-segment">
+                    <div class="timer-item-container">
+                        <span id="hours1" class="timer-item">0</span>
+                        <span id="hours2" class="timer-item">0</span>
+                    </div>
+                    <div class="timer-label">Hours</div>
+                </div>
+                <span class="timer-separator">:</span>
+                <div class="timer-segment">
+                    <div class="timer-item-container">
+                        <span id="minutes1" class="timer-item">0</span>
+                        <span id="minutes2" class="timer-item">0</span>
+                    </div>
+                    <div class="timer-label">Minutes</div>
+                </div>
+                <span class="timer-separator">:</span>
+                <div class="timer-segment">
+                    <div class="timer-item-container">
+                        <span id="seconds1" class="timer-item">0</span>
+                        <span id="seconds2" class="timer-item">0</span>
+                    </div>
+                    <div class="timer-label">Seconds</div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button id="greeting-btn" class="greeting-btn" onclick="openGreeting()">
+                    ⋆˚࿔ click me 𝜗𝜚˚⋆
+                </button>
+                <button id="openme-btn" class="openme-btn" onclick="openBdayCard()">
+                    ⋆˚࿔ open me 𝜗𝜚˚⋆
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="bday-card-container">
+        <div class="bdayCard">
+            <div class="cardFront"></div>
+            <div class="cardBackLeft"></div>
+            <div class="cardInside">
+                <div class="candle-count-display">
+                    <h1></h1>
+                </div>
+                <div class="cake">
+                    <div class="plate"></div>
+                    <div class="layer layer-bottom"></div>
+                    <div class="layer layer-middle"></div>
+                    <div class="layer layer-top"></div>
+                    <div class="icing"></div>
+                    <div class="icing-shadow"></div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-2 mb-3">
+            <h5 style="font-style: italic; font-size: 10px; color: grey;">click the card</h5>
+        </div>
+    </div>
+    <audio id="audio" preload="auto">
+        <source src="assets/img/bday-song-1.mp3" type="audio/mp3">
+    </audio>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const birthdayDate = new Date("2025-02-10T00:00:00");
+            const titleElement = document.querySelector(".countdown-title");
+            const countdownContainer = document.querySelector(".countdown-container");
+            const card = document.querySelector(".bdayCard");
+            const cardContainer = document.querySelector(".bday-card-container");
+            const greetingBtn = document.querySelector(".greeting-btn");
+            const openMeBtn = document.querySelector(".openme-btn");
+            const animatedText = document.querySelector(".countdown-title-body");
+            const gifEnvelope = document.getElementById("gifEnvelope");
+            const countdownTimer = document.getElementById("countdown");
+            const audio = document.getElementById("audio");
+            const cake = document.querySelector(".cake");
+            let confettiInterval;
+            let isCountdownOver = false;
+            let candles = [];
+            let audioContext;
+            let analyser;
+            let microphone;
+
+            function updateTimerElement(id, value) {
+                document.getElementById(id).textContent = value;
+            }
+
+            function animateText() {
+                const existingVideo = document.getElementById("bg-video-1");
+                if (existingVideo) existingVideo.remove();
+
+                if (document.getElementById("bgVideo")) return;
+
+                const video = document.createElement("video");
+                video.id = "bg-video-1";
+                video.src = "assets/img/kayra-bid-1.mp4";
+                video.autoplay = true;
+                video.loop = true;
+                video.controls = false;
+                video.muted = false;
+                video.volume = 0.5;
+                video.style.position = "fixed";
+                video.style.top = "50%";
+                video.style.left = "50%";
+                video.style.transform = "translate(-50%, -50%)";
+                video.style.width = "100vw";
+                video.style.height = "100vh";
+                video.style.objectFit = "cover";
+                video.style.zIndex = "-1";
+                video.setAttribute("playsinline", "");
+
+                document.body.appendChild(video);
+            }
+
+            function updateCountdown() {
+                const now = new Date();
+                const timeDiff = birthdayDate - now;
+
+                if (timeDiff <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('gifEnvelope');
+                    document.getElementById('countdown');
+                    document.querySelector('.greeting-btn').style.display = "block";
+
+                    isCountdownOver = true;
+                    titleElement.textContent = "🎉 HABADU KHAIRA 🎉";
+                    startConfettiEffect();
+                    document.getElementById("bg-video-3").classList.add("show-bg");
+                    return;
+                }
+
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                const daysStr = String(days).padStart(2, '0');
+                const hoursStr = String(hours).padStart(2, '0');
+                const minutesStr = String(minutes).padStart(2, '0');
+                const secondsStr = String(seconds).padStart(2, '0');
+
+                updateTimerElement("days1", daysStr[0]);
+                updateTimerElement("days2", daysStr[1]);
+                updateTimerElement("hours1", hoursStr[0]);
+                updateTimerElement("hours2", hoursStr[1]);
+                updateTimerElement("minutes1", minutesStr[0]);
+                updateTimerElement("minutes2", minutesStr[1]);
+                updateTimerElement("seconds1", secondsStr[0]);
+                updateTimerElement("seconds2", secondsStr[1]);
+            }
+            const countdownInterval = setInterval(updateCountdown, 1000);
+            updateCountdown();
+
+            const texts = ["save the date", "habadu kayra!"];
+            let textIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+
+            function typeWriterEffect() {
+                if (isCountdownOver) return;
+
+                const currentText = texts[textIndex];
+
+                if (!isDeleting) {
+                    titleElement.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+
+                    if (charIndex === currentText.length) {
+                        let delay = textIndex === 1 ? 6000 : 2000;
+                        setTimeout(() => {
+                            isDeleting = true;
+                            typeWriterEffect();
+                        }, delay);
+                        return;
+                    }
+                } else {
+                    titleElement.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+
+                    if (charIndex === 0) {
+                        isDeleting = false;
+                        textIndex = (textIndex + 1) % texts.length;
+                    }
+                }
+
+                let speed = isDeleting ? 100 : 200;
+                setTimeout(typeWriterEffect, speed);
+            }
+
+            typeWriterEffect();
+            
+            function startConfettiEffect() {
+                const confettiContainer = document.createElement("div");
+                confettiContainer.classList.add("confetti-container");
+                document.body.appendChild(confettiContainer);
+
+                confettiInterval = setInterval(() => {
+                    for (let i = 0; i < 50; i++) {
+                        let confettiPiece = document.createElement("div");
+                        confettiPiece.classList.add("confetti-start");
+
+                        let side = Math.random() < 0.5 ? "left" : "right"; 
+                        confettiPiece.style.position = "fixed";
+                        confettiPiece.style.bottom = "0px";
+                        confettiPiece.style.left = Math.random() * 100 + "vw";
+
+                        confettiPiece.style.width = Math.random() * 10 + 5 + "px";
+                        confettiPiece.style.height = Math.random() * 5 + 3 + "px";
+                        confettiPiece.style.backgroundColor = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF"][Math.floor(Math.random() * 4)];
+
+                        confettiPiece.style.animation = `confetti-fall-start ${Math.random() * 2 + 2}s linear infinite`;
+                        confettiContainer.appendChild(confettiPiece);
+
+                        setTimeout(() => confettiPiece.remove(), 3000);
+                    }
+                }, 300);
+            }
+
+            function stopConfettiEffect() {
+                clearInterval(confettiInterval);
+                document.querySelector(".confetti-container")?.remove();
+            }
+
+            greetingBtn.addEventListener("click", stopConfettiEffect);
+
+            window.openGreeting = function () {
+                titleElement.style.display = "none";
+                gifEnvelope.style.display = "none";
+                countdown.style.display = "none";
+                greetingBtn.style.display = "none";
+                const bgVideo = document.getElementById("bg-video-1");
+                if (bgVideo) {
+                    bgVideo.pause();
+                    bgVideo.src = "";
+                    bgVideo.remove();
+                }
+                animateText();
+                openMeBtn.style.display = "block";
+            };
+            
+            window.openBdayCard = function() {
+                countdownContainer.style.display = "none";
+                cardContainer.style.display = "flex";
+
+                const existingVideo = document.getElementById("bg-video-1");
+                if (existingVideo) {
+                    existingVideo.pause();
+                    existingVideo.src = "";
+                    existingVideo.remove();
+                }
+
+                const bdayVideo = document.createElement("video");
+                bdayVideo.id = "bg-video-2"; 
+                bdayVideo.src = "assets/img/kayra-bid-2.mp4"; 
+                bdayVideo.autoplay = true;
+                bdayVideo.loop = true;
+                bdayVideo.controls = false;
+                bdayVideo.muted = false;
+                bdayVideo.volume = 0.5;
+                bdayVideo.style.position = "fixed";
+                bdayVideo.style.top = "50%";
+                bdayVideo.style.left = "50%";
+                bdayVideo.style.transform = "translate(-50%, -50%)";
+                bdayVideo.style.width = "100vw";
+                bdayVideo.style.height = "100vh";
+                bdayVideo.style.objectFit = "cover";
+                bdayVideo.style.zIndex = "-1";
+                bdayVideo.setAttribute("playsinline", "");
+
+                // Append the new video
+                document.body.appendChild(bdayVideo);
+            };
+
+            function openCard(event) {
+                event.stopPropagation();
+                if (card.classList.contains("open")) {
+                    card.classList.remove("open", "opened");
+                    audio.pause();
+                    audio.currentTime = 0;
+                    resetCandles();
+                } else {
+                    card.classList.add("open", "opened");
+                    audio.play();
+                }
+            }
+            card.addEventListener("pointerdown", openCard);
+
+            function resetCandles() {
+                candles.forEach(candle => candle.remove());
+                candles = [];
+            }
+
+            function addCandle(left, top) {
+                const candle = document.createElement("div");
+                candle.className = "candle";
+                candle.style.left = left + "px";
+                candle.style.top = top + "px";
+
+                const flame = document.createElement("div");
+                flame.className = "flame";
+                candle.appendChild(flame);
+
+                cake.appendChild(candle);
+                candles.push(candle);
+
+                addCandleSound();
+            }
+
+            function addCandleSound() {
+                const candleAudio = new Audio("assets/img/audio-tap.mp3");
+                candleAudio.play();
+            }
+
+            cake.addEventListener("pointerdown", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                let x, y;
+                if (event.touches) {
+                    x = event.touches[0].clientX;
+                    y = event.touches[0].clientY;
+                } else {
+                    x = event.clientX;
+                    y = event.clientY;
+                }
+                
+                const rect = cake.getBoundingClientRect();
+                const left = event.clientX - rect.left;
+                const top = event.clientY - rect.top;
+                addCandle(left, top);
+            });
+
+            function isBlowing() {
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                analyser.getByteFrequencyData(dataArray);
+
+                let sum = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                sum += dataArray[i];
+                }
+                let average = sum / bufferLength;
+
+                return average > 40;
+            }
+
+            function blowOutCandles() {
+                let anyCandleBlown = false;
+                candles.forEach((candle, index) => {
+                    if (!candle.classList.contains("out")) {
+                        setTimeout(() => {
+                            if (isBlowing() && Math.random() > 0.5) {
+                                candle.classList.add("out");
+                                anyCandleBlown = true;
+                            }
+
+                            if (anyCandleBlown) {
+                                triggerConfetti();
+                            }
+                        }, index * 500);
+                    }
+                });
+            }
+
+            function triggerConfetti() {
+                const confettiContainer = document.createElement("div");
+                confettiContainer.classList.add("confetti-container");
+                document.body.appendChild(confettiContainer);
+
+                const colors = ["#49108B", "#7E30E1", "#E26EE5", "#9F70FD", "#B7C9F2", "#F5DD61"];
+
+                for (let i = 0; i < 100; i++) {
+                    let confettiPiece = document.createElement("div");
+                    confettiPiece.classList.add("confetti");
+                    
+                    confettiPiece.style.left = Math.random() * 100 + "vw";
+                    confettiPiece.style.animationDuration = Math.random() * 3 + 2 + "s";
+                    confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                    confettiPiece.style.width = Math.random() * 15 + 5 + "px";
+                    confettiPiece.style.height = Math.random() * 5 + 3 + "px";
+
+                    const rotationStart = Math.random() * 360 + "deg";
+                    const rotationEnd = Math.random() * 720 + "deg";
+                    confettiPiece.style.setProperty("--rotation-start", rotationStart);
+                    confettiPiece.style.setProperty("--rotation-end", rotationEnd);
+
+                    confettiContainer.appendChild(confettiPiece);
+                }
+
+                setTimeout(() => {
+                    confettiContainer.remove();
+                }, 5000);
+            }
+
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices
+                .getUserMedia({ audio: true })
+                .then(function (stream) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    analyser = audioContext.createAnalyser();
+                    microphone = audioContext.createMediaStreamSource(stream);
+                    microphone.connect(analyser);
+                    analyser.fftSize = 256;
+                    setInterval(blowOutCandles, 200);
+                })
+                .catch(function (err) {
+                    console.log("Unable to access microphone: " + err);
+                });
+            } else {
+                console.log("getUserMedia not supported on your browser!");
+            }
+        });
+    </script>
+  </body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,4 +1146,4 @@
         <source src="assets/img/bday-song-2.mp3" type="audio/mp3">
     </audio>
 </body>
-</html>
+</html> -->
